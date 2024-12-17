@@ -5,14 +5,31 @@
 
 using namespace std;
 
-static auto camera = glm::mat4{2, 0, 0, 0, 0, 2, 0, 322, 0, 0, 1, 0, 0, 0, 0, 1};
+// clang-format off
+static auto original_camera = glm::mat4{
+	2, 0, 0, 0,
+	0, 2, 0, 322,
+	0, 0, 1, 0,
+	0, 0, 0, 1
+};
+// clang-format on
+//m[0][0] and m[1][1] must be same value to maintain aspect ratio
+
+static auto camera = glm::mat4{1.0};
+
+// Expand 4 xy coordinates to 4 xyz coordinates
+static glm::mat4x3 _2dto3d(const glm::mat4x2 v, const float z = 1.0) {
+	return glm::mat4x3(
+		glm::vec3{v[0], z},
+		glm::vec3{v[1], z},
+		glm::vec3{v[2], z},
+		glm::vec3{v[3], z}
+	);
+}
 
 // IN:  Quad vertices
 // OUT: Triangle vertices, transformed
 glm::mat4x3 correct_transform(const glm::mat4x2 vertices) {
-	camera[0][0] = 2.07219708396179;
-	camera[1][1] = 2.07219708396179;
-
 	const auto v2 = glm::mat4{
 		glm::vec4(vertices[0], 1.0, 1.0),
 		glm::vec4(vertices[1], 1.0, 1.0),
@@ -40,6 +57,7 @@ glm::mat4x3 correct_transform(const glm::mat4x2 vertices) {
 
 glm::mat4x3 test_transform(const glm::mat4x2 vertices) {
         cout << "TEST TEST TEST\n";
+		cout << glm::to_string(_2dto3d(vertices)) << endl;
         const auto projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f);
         cout << glm::to_string(projection) << endl;
         return glm::mat4x3();
