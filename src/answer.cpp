@@ -5,6 +5,13 @@
 
 using namespace std;
 
+extern const glm::vec4 s9ortho;
+extern const glm::vec4 s6ortho;
+
+static glm::mat4 ortho(const glm::vec4 v) {
+	return glm::ortho(v.x, v.y, v.z, v.w);
+}
+
 // clang-format off
 static auto original_camera = glm::mat4{
 	2, 0, 0, 0,
@@ -60,5 +67,7 @@ glm::mat4x3 test_transform(const glm::mat4x2 vertices) {
 		cout << glm::to_string(_2dto3d(vertices)) << endl;
         const auto projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f);
         cout << glm::to_string(projection) << endl;
+		cout << glm::to_string(ortho(s9ortho)) << endl;
+		cout << glm::to_string(ortho(s6ortho)) << endl;
         return glm::mat4x3();
 }
